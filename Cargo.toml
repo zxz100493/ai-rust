@@ -1,5 +1,5 @@
 [package]
-name = "ai-rust"
+name = "ai_rust"
 version = "0.1.0"
 edition = "2021"
 
