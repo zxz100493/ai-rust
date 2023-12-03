@@ -1,18 +1,7 @@
+use crate::ai::dispatch::RequestApi;
+use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 use std::vec;
-
-// use std::path::PathBuf;
-use structopt::StructOpt;
-
-#[derive(Debug, StructOpt)]
-#[allow(dead_code)]
-#[structopt(name = "ai talk by rust", about = "talk with ai by rust api")]
-pub struct Opt {
-    /// 你的问题
-    // short and long flags (-d, --debug) will be deduced from the field's name
-    #[structopt(short, long)]
-    pub message: String,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 struct MsgBody {
@@ -21,8 +10,19 @@ struct MsgBody {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Msg<T> {
-    messages: T,
+pub struct Msg<T> {
+    pub messages: T,
+}
+
+#[async_trait]
+impl<T: std::fmt::Debug + ToString + std::marker::Sync> RequestApi for Msg<T> {
+    async fn request(&self) {
+        println!("baidu impl Ai: {:?}", self.messages);
+        // self.request_api();
+        let msg = self.messages.to_string();
+        request_api(msg).await;
+        // self.messages.to_string()
+    }
 }
 
 pub async fn request_api(msg: String) {
